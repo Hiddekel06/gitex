@@ -159,7 +159,7 @@
             </div>
         @endforeach
 
-        <button type="submit" class="btn-modern mt-4">
+        <button type="submit" class="btn-modern mt-4" id="submitBtn">
             Valider le formulaire
         </button>
     </form>
@@ -167,6 +167,15 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Désactive le bouton submit après soumission pour éviter le double envoi
+        const form = document.querySelector('form');
+        const submitBtn = document.getElementById('submitBtn');
+        if (form && submitBtn) {
+            form.addEventListener('submit', function() {
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Envoi en cours...';
+            });
+        }
         @foreach($questions as $question)
             @if($question->has_justification)
                 const ouiRadio{{ $question->id }} = document.getElementById('q{{ $question->id }}_oui');

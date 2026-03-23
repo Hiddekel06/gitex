@@ -16,5 +16,6 @@ class ReponseUtilisateur extends Model
         'question_id',
         'reponse',
         'justification',
+        'int_value',
     ];
 }
