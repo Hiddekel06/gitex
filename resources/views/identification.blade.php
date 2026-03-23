@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap');
     body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; }
@@ -84,7 +85,7 @@
 
 <div class="d-flex justify-content-center align-items-center min-vh-100 py-4 py-md-5">
     <div class="modern-card p-4 p-md-5" style="max-width: 500px; width: 100%;">
-        <h2 class="form-title">Identification utilisateur</h2>
+        <h2 class="form-title">Finaliste Gov'Athon</h2>
 
         @if ($errors->any())
             <div class="alert-custom">
@@ -122,6 +123,6 @@
             <button type="submit" class="btn-modern mt-2">Valider</button>
         </form>
     </div>
-    <h1>Test</h1>
+
 </div>
 @endsection
