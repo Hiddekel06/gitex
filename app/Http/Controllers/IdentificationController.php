@@ -32,6 +32,9 @@ class IdentificationController extends Controller
             return back()->withErrors(['equipe_id' => 'Cette équipe a déjà été utilisée.'])->withInput();
         }
 
+        // On flush la session pour éviter toute collision d'utilisateur précédent
+        $request->session()->flush();
+
         // Créer l'utilisateur (on ne stocke que l'email et l'équipe, nom/prénom si besoin)
         $user = User::create([
             'name' => $validated['prenom'] . ' ' . $validated['nom'],

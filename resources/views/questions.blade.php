@@ -108,17 +108,18 @@
                     {{ ($i+1) . '. ' . $question->intitule }}
                 </span>
 
-                @if($question->type_reponse === 'int' && !$question->has_justification)
-                    <input type="number" class="form-control mt-2"
-                        name="reponse[{{ $question->id }}]"
-                        id="reponse_{{ $question->id }}"
-                        min="0" step="1" required>
 
-                @elseif($question->type_reponse === 'text' && !$question->has_justification)
-                    <input type="text" class="form-control mt-2"
-                        name="reponse[{{ $question->id }}]"
-                        id="reponse_{{ $question->id }}" required>
-
+                @if($question->type_question === 'direct')
+                    @if($question->type_reponse === 'int')
+                        <input type="number" class="form-control mt-2"
+                            name="int_value[{{ $question->id }}]"
+                            id="int_value_{{ $question->id }}"
+                            min="0" step="1" required>
+                    @elseif($question->type_reponse === 'text')
+                        <input type="text" class="form-control mt-2"
+                            name="reponse[{{ $question->id }}]"
+                            id="reponse_{{ $question->id }}" required>
+                    @endif
                 @else
                     <div class="d-flex mt-2">
                         <div class="form-check">
@@ -128,7 +129,6 @@
                                 value="oui" required>
                             <label class="form-check-label" for="q{{ $question->id }}_oui">Oui</label>
                         </div>
-
                         <div class="form-check">
                             <input class="form-check-input" type="radio"
                                 name="reponse[{{ $question->id }}]"
@@ -137,7 +137,6 @@
                             <label class="form-check-label" for="q{{ $question->id }}_non">Non</label>
                         </div>
                     </div>
-
                     @if($question->has_justification)
                     <div class="mt-3" id="justif_block_{{ $question->id }}" style="display:none;">
                         <div class="input-label">Justification (obligatoire si NON)</div>
@@ -146,7 +145,6 @@
                             id="justification_{{ $question->id }}">
                     </div>
                     @endif
-
                     @if($question->type_reponse === 'int')
                     <div class="mt-3" id="int_block_{{ $question->id }}" style="display:none;">
                         <div class="input-label">Veuillez indiquer le poids</div>
@@ -156,7 +154,6 @@
                             min="0" step="1">
                     </div>
                     @endif
-
                 @endif
 
             </div>
@@ -171,24 +168,26 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         @foreach($questions as $question)
-            const ouiRadio{{ $question->id }} = document.getElementById('q{{ $question->id }}_oui');
-            const nonRadio{{ $question->id }} = document.getElementById('q{{ $question->id }}_non');
-            const justifBlock{{ $question->id }} = document.getElementById('justif_block_{{ $question->id }}');
-            const justifInput{{ $question->id }} = document.getElementById('justification_{{ $question->id }}');
+            @if($question->has_justification)
+                const ouiRadio{{ $question->id }} = document.getElementById('q{{ $question->id }}_oui');
+                const nonRadio{{ $question->id }} = document.getElementById('q{{ $question->id }}_non');
+                const justifBlock{{ $question->id }} = document.getElementById('justif_block_{{ $question->id }}');
+                const justifInput{{ $question->id }} = document.getElementById('justification_{{ $question->id }}');
 
-            if (nonRadio{{ $question->id }}) {
-                nonRadio{{ $question->id }}.addEventListener('change', function() {
-                    justifBlock{{ $question->id }}.style.display = 'block';
-                    justifInput{{ $question->id }}.setAttribute('required', 'required');
-                });
-            }
+                if (nonRadio{{ $question->id }}) {
+                    nonRadio{{ $question->id }}.addEventListener('change', function() {
+                        justifBlock{{ $question->id }}.style.display = 'block';
+                        justifInput{{ $question->id }}.setAttribute('required', 'required');
+                    });
+                }
 
-            if (ouiRadio{{ $question->id }}) {
-                ouiRadio{{ $question->id }}.addEventListener('change', function() {
-                    justifBlock{{ $question->id }}.style.display = 'none';
-                    justifInput{{ $question->id }}.removeAttribute('required');
-                });
-            }
+                if (ouiRadio{{ $question->id }}) {
+                    ouiRadio{{ $question->id }}.addEventListener('change', function() {
+                        justifBlock{{ $question->id }}.style.display = 'none';
+                        justifInput{{ $question->id }}.removeAttribute('required');
+                    });
+                }
+            @endif
         @endforeach
 
         @foreach($questions as $question)

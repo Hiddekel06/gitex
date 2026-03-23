@@ -17,6 +17,10 @@ class QuestionsController extends Controller
     public function store(Request $request)
     {
         $userId = session('user_id');
+        if (!$userId) {
+            // Sécurité : session expirée ou non identifié
+            return redirect()->route('identification')->with('error', 'Votre session a expiré. Veuillez vous identifier à nouveau.');
+        }
         $questions = Question::all();
         $data = $request->all();
         $stop = false;
@@ -24,12 +28,14 @@ class QuestionsController extends Controller
         foreach ($questions as $i => $question) {
             $reponse = $data['reponse'][$question->id] ?? null;
             $justification = $data['justification'][$question->id] ?? null;
+            $intValue = $data['int_value'][$question->id] ?? null;
             if ($reponse === null) continue;
             ReponseUtilisateur::create([
                 'user_id' => $userId,
                 'question_id' => $question->id,
                 'reponse' => $reponse,
                 'justification' => $reponse === 'non' ? $justification : null,
+                'int_value' => $reponse === 'oui' && $intValue !== null ? $intValue : null,
             ]);
             if ($i === 0 && $reponse === 'non') {
                 $stop = true;
