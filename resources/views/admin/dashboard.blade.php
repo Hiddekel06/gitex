@@ -17,6 +17,24 @@
         </form>
 
         @if($selectedEquipeId && $users->count())
+        <div class="row mb-4 justify-content-center">
+            <div class="col-md-3 mb-2">
+                <div class="card text-center shadow" style="background:rgba(40,80,40,0.97); border-radius:18px; border:1px solid #2c2c2c;">
+                    <div class="card-body">
+                        <div style="font-size:2.2rem; font-weight:700; color:#b6f7b6;">{{ $nbOui }}</div>
+                        <div style="font-size:1.1rem; color:#e9f5e9;">Nombre de OUI</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-2">
+                <div class="card text-center shadow" style="background:rgba(80,40,40,0.97); border-radius:18px; border:1px solid #2c2c2c;">
+                    <div class="card-body">
+                        <div style="font-size:2.2rem; font-weight:700; color:#ffd6d6;">{{ $nbNon }}</div>
+                        <div style="font-size:1.1rem; color:#e9f5e9;">Nombre de NON</div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="table-responsive mt-4">
             <table class="table table-dark table-bordered align-middle">
                 <thead>
