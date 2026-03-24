@@ -2,12 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-use App\Http\Controllers\IdentificationController;
 use App\Http\Controllers\QuestionsController;
+use App\Http\Controllers\IdentificationController;
+Route::get('/', function () {
+	return view('welcome');
+});
 
 Route::get('/identification', [IdentificationController::class, 'showForm'])->name('identification');
 Route::post('/identification', [IdentificationController::class, 'submitForm'])->name('identification.submit');
