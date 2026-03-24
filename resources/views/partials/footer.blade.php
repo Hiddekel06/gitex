@@ -1,3 +1,7 @@
-<footer style="background:#181818; color:#e9f5e9; border-top:1px solid #222; font-size:0.95rem; padding:0.7rem 0; text-align:center;">
-    &copy; {{ date('Y') }} MFPTRSP/DSI  Gov'AthonGitex.
+<footer style="border-top: 1px solid rgba(90, 143, 76, 0.2); background: transparent; padding: 1rem 0; text-align: center; font-family: 'Inter', system-ui, sans-serif;">
+    <div class="container">
+        <p style="margin: 0; font-size: 0.8rem; letter-spacing: 0.3px; color: #8f9e8b; transition: color 0.2s ease;">
+            &copy; {{ date('Y') }} MFPTRSP/DSI – Gov'Athon Gitex
+        </p>
+    </div>
 </footer>
