@@ -25,6 +25,11 @@ class User extends Authenticatable
         'completed',
     ];
 
+    public function equipe()
+    {
+        return $this->belongsTo(\App\Models\Equipe::class, 'equipe_id');
+    }
+
     /**
      * Get the attributes that should be cast.
      *

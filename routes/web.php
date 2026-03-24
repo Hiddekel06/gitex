@@ -5,10 +5,9 @@ use App\Http\Controllers\QuestionsController;
 use App\Http\Controllers\IdentificationController;
 use App\Http\Controllers\AdminAuthController;
 
-// Dashboard admin protégé
-Route::get('/admin/dashboard', function () {
-	return view('admin.dashboard');
-})->middleware('admin.auth')->name('admin.dashboard');
+// Dashboard admin (middleware désactivé temporairement)
+use App\Http\Controllers\AdminDashboardController;
+Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
 // Routes admin
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
