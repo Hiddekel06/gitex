@@ -315,26 +315,58 @@
                         <div class="input-hint">Réponse textuelle</div>
                     @endif
                 @else
-                    <div class="radio-group">
-                        <div class="radio-custom">
-                            <input type="radio" class="radio-option"
-                                name="reponse[{{ $question->id }}]"
-                                id="q{{ $question->id }}_oui"
-                                value="oui"
-                                data-question-id="{{ $question->id }}"
-                                required>
-                            <label for="q{{ $question->id }}_oui">Oui</label>
+                    @if($i === 2)
+                        <div class="radio-group">
+                            <div class="radio-custom">
+                                <input type="radio" class="radio-option"
+                                    name="reponse[{{ $question->id }}]"
+                                    id="q{{ $question->id }}_oui"
+                                    value="oui"
+                                    data-question-id="{{ $question->id }}"
+                                    required>
+                                <label for="q{{ $question->id }}_oui">Oui</label>
+                            </div>
+                            <div class="radio-custom">
+                                <input type="radio" class="radio-option"
+                                    name="reponse[{{ $question->id }}]"
+                                    id="q{{ $question->id }}_non"
+                                    value="non"
+                                    data-question-id="{{ $question->id }}"
+                                    required>
+                                <label for="q{{ $question->id }}_non">Non</label>
+                            </div>
+                            <div class="radio-custom">
+                                <input type="radio" class="radio-option"
+                                    name="reponse[{{ $question->id }}]"
+                                    id="q{{ $question->id }}_en_cours"
+                                    value="en_cours"
+                                    data-question-id="{{ $question->id }}"
+                                    required>
+                                <label for="q{{ $question->id }}_en_cours">En cours</label>
+                            </div>
                         </div>
-                        <div class="radio-custom">
-                            <input type="radio" class="radio-option"
-                                name="reponse[{{ $question->id }}]"
-                                id="q{{ $question->id }}_non"
-                                value="non"
-                                data-question-id="{{ $question->id }}"
-                                required>
-                            <label for="q{{ $question->id }}_non">Non</label>
+                    @else
+                        <div class="radio-group">
+                            <div class="radio-custom">
+                                <input type="radio" class="radio-option"
+                                    name="reponse[{{ $question->id }}]"
+                                    id="q{{ $question->id }}_oui"
+                                    value="oui"
+                                    data-question-id="{{ $question->id }}"
+                                    required>
+                                <label for="q{{ $question->id }}_oui">Oui</label>
+                            </div>
+                            <div class="radio-custom">
+                                <input type="radio" class="radio-option"
+                                    name="reponse[{{ $question->id }}]"
+                                    id="q{{ $question->id }}_non"
+                                    value="non"
+                                    data-question-id="{{ $question->id }}"
+                                    required>
+                                <label for="q{{ $question->id }}_non">Non</label>
+                            </div>
                         </div>
-                    </div>
+                    @endif
 
                     @if($question->has_justification)
                     <div class="dynamic-block" id="justif_block_{{ $question->id }}" style="display:none;">
