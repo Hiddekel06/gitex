@@ -128,6 +128,14 @@
         font-size: 0.95rem;
         transition: var(--transition-smooth);
     }
+    .disabled-field {
+        background: #232323 !important;
+        color: #888 !important;
+        border-color: #444 !important;
+        cursor: not-allowed !important;
+        opacity: 0.7 !important;
+        pointer-events: none !important;
+    }
     input[type="number"].form-control,
     input[type="text"].form-control {
         color: #fff !important;
@@ -280,7 +288,19 @@
                 </div>
 
                 @if($question->type_question === 'direct')
-                    @if($question->type_reponse === 'int')
+                    @if($question->type_reponse === 'int' && $i === 1)
+                        <div class="radio-group">
+                            <div class="radio-custom">
+                                <input type="radio" class="radio-option" name="int_value[{{ $question->id }}]" id="int_value_{{ $question->id }}_2" value="2" required>
+                                <label for="int_value_{{ $question->id }}_2">2 membres</label>
+                            </div>
+                            <div class="radio-custom">
+                                <input type="radio" class="radio-option" name="int_value[{{ $question->id }}]" id="int_value_{{ $question->id }}_3" value="3" required>
+                                <label for="int_value_{{ $question->id }}_3">3 membres</label>
+                            </div>
+                        </div>
+                        <div class="input-hint">Choisissez 2 ou 3 membres</div>
+                    @elseif($question->type_reponse === 'int')
                         <input type="number" class="form-control mt-2 question-input"
                             name="int_value[{{ $question->id }}]"
                             id="int_value_{{ $question->id }}"
@@ -318,7 +338,7 @@
 
                     @if($question->has_justification)
                     <div class="dynamic-block" id="justif_block_{{ $question->id }}" style="display:none;">
-                        <label class="form-label">Justification (obligatoire si NON)</label>
+                        <label class="form-label">Quelle est la raison ?</label>
                         <input type="text" class="form-control"
                             name="justification[{{ $question->id }}]"
                             id="justification_{{ $question->id }}">
@@ -445,4 +465,152 @@
         // Ajoute une classe pour l'apparition fluide (déjà gérée par CSS)
     });
 </script>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const form = document.getElementById('questionForm');
+    const allCards = document.querySelectorAll('.question-card');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // =========================
+    // 🔹 GESTION Q1 (LOGIQUE MÉTIER)
+    // =========================
+    const firstCard = allCards[0];
+    const firstQuestionId = firstCard.dataset.questionId;
+    const firstRadios = document.querySelectorAll(`input[name="reponse[${firstQuestionId}]"]`);
+
+    function toggleRequired(state) {
+        allCards.forEach((card, index) => {
+            if (index !== 0) {
+                const inputs = card.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    if (state) {
+                        input.removeAttribute('required');
+                    } else {
+                        if (input.classList.contains('radio-option') || input.classList.contains('question-input')) {
+                            input.setAttribute('required', 'required');
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function handleFirstQuestion() {
+        let selected = null;
+        firstRadios.forEach(r => { if (r.checked) selected = r.value; });
+
+        if (selected === 'non') {
+            allCards.forEach((card, index) => {
+                card.style.display = index === 0 ? '' : 'none';
+            });
+
+            toggleRequired(true);
+            submitBtn.innerText = "Valider et terminer";
+        } else {
+            allCards.forEach(card => card.style.display = '');
+            toggleRequired(false);
+            submitBtn.innerText = "Valider le formulaire";
+        }
+    }
+
+    firstRadios.forEach(r => r.addEventListener('change', handleFirstQuestion));
+
+    // =========================
+    // 🔹 JUSTIFICATION + INT
+    // =========================
+
+    document.querySelectorAll('.question-card').forEach((card, idx) => {
+        const qid = card.dataset.questionId;
+        const oui = document.getElementById(`q${qid}_oui`);
+        const non = document.getElementById(`q${qid}_non`);
+        const justifBlock = document.getElementById(`justif_block_${qid}`);
+        const justifInput = document.getElementById(`justification_${qid}`);
+        const intBlock = document.getElementById(`int_block_${qid}`);
+
+        function updateDynamicFields() {
+            // JUSTIFICATION
+            if (justifBlock && justifInput) {
+                if (non && non.checked) {
+                    justifBlock.style.display = 'block';
+                    if (idx === 0) {
+                        justifInput.setAttribute('required', 'required'); // obligatoire SEULEMENT pour la première question
+                    } else {
+                        justifInput.removeAttribute('required'); // jamais obligatoire pour les autres
+                    }
+                } else {
+                    justifBlock.style.display = 'none';
+                    justifInput.removeAttribute('required');
+                }
+            }
+            // INT
+            if (intBlock) {
+                if (oui && oui.checked) {
+                    intBlock.style.display = 'block';
+                } else {
+                    intBlock.style.display = 'none';
+                }
+            }
+        }
+
+        if (oui) oui.addEventListener('change', updateDynamicFields);
+        if (non) non.addEventListener('change', updateDynamicFields);
+        updateDynamicFields();
+    });
+
+    // =========================
+    // 🔹 PROGRESSION
+    // =========================
+    function updateProgress() {
+        const total = allCards.length;
+        let answered = 0;
+
+        allCards.forEach(card => {
+
+            if (card.style.display === 'none') return;
+
+            const inputs = card.querySelectorAll('input');
+
+            let isAnswered = false;
+
+            inputs.forEach(input => {
+                if (
+                    (input.type === 'radio' && input.checked) ||
+                    (input.type !== 'radio' && input.value.trim() !== '')
+                ) {
+                    isAnswered = true;
+                }
+            });
+
+            if (isAnswered) answered++;
+        });
+
+        const percent = total === 0 ? 0 : Math.round((answered / total) * 100);
+
+        document.getElementById('answeredCount').innerText = answered;
+        document.getElementById('progressFill').style.width = percent + '%';
+        document.getElementById('progressPercent').innerText = percent + '%';
+    }
+
+    form.addEventListener('change', updateProgress);
+    form.addEventListener('input', updateProgress);
+
+    // =========================
+    // 🔹 SUBMIT PROTECTION
+    // =========================
+    form.addEventListener('submit', function () {
+        submitBtn.disabled = true;
+        submitBtn.innerText = "✨ Envoi en cours...";
+    });
+
+    // =========================
+    // INIT
+    // =========================
+    handleFirstQuestion();
+    updateProgress();
+});
+</script>
+@endpush
 @endsection

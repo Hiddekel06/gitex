@@ -254,7 +254,7 @@
             <div class="mb-4">
                 <label for="equipe_id" class="form-label">Équipe</label>
                 <select class="form-select" id="equipe_id" name="equipe_id" required>
-                    <option value="">Sélectionner une équipe</option>
+                    <option value="">Sélectionner votre équipe</option>
                     @foreach($equipes as $equipe)
                         <option value="{{ $equipe->id }}" {{ old('equipe_id') == $equipe->id ? 'selected' : '' }}>{{ $equipe->nom }}</option>
                     @endforeach
