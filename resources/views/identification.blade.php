@@ -29,7 +29,7 @@
         color: transparent;
         margin-bottom: 1.5rem;
         letter-spacing: -0.3px;
-        border-left: 4px solid #5a8f4c;
+        border-left: 4px solid #e53935; /* rouge vif */
         padding-left: 1rem;
         display: inline-block;
     }
@@ -92,7 +92,7 @@
 
     /* Button with ripple and gradient */
     .btn-modern {
-        background: linear-gradient(95deg, #5a8f4c, #3c6e2f);
+        background: linear-gradient(95deg, #5a8f4c 60%, #3c6e2f 100%);
         border: none;
         border-radius: 40px;
         padding: 0.85rem 1.5rem;
@@ -104,7 +104,7 @@
         letter-spacing: 0.3px;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 12px rgba(90,143,76,0.18);
     }
     .btn-modern::after {
         content: '';
@@ -123,9 +123,9 @@
         height: 200px;
     }
     .btn-modern:hover {
-        background: linear-gradient(95deg, #4a7a3c, #2e5822);
+        background: linear-gradient(95deg, #3c6e2f, #2e5822);
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(90, 143, 76, 0.3);
+        box-shadow: 0 8px 20px rgba(90, 143, 76, 0.22);
     }
     .btn-modern:active {
         transform: translateY(1px);
@@ -133,14 +133,15 @@
 
     /* Custom alert */
     .alert-custom {
-        background: rgba(44, 44, 44, 0.9);
+        background: rgba(44, 44, 44, 0.93);
         backdrop-filter: blur(4px);
-        border-left: 4px solid #d68c3c;
+        border-left: 4px solid #e53935;
         border-radius: 20px;
         color: #ffb366;
         padding: 0.75rem 1rem;
         margin-bottom: 1.75rem;
         font-size: 0.875rem;
+        box-shadow: 0 0 8px 0 #e5393533;
     }
     .alert-custom ul {
         margin: 0;
@@ -237,17 +238,17 @@
 
             <div class="mb-4">
                 <label for="prenom" class="form-label">Prénom</label>
-                <input type="text" class="form-control" id="prenom" name="prenom" value="{{ old('prenom') }}" required placeholder="Votre prénom">
+                <input type="text" class="form-control" id="prenom" name="prenom" value="{{ old('prenom') }}" required placeholder="">
             </div>
 
             <div class="mb-4">
                 <label for="nom" class="form-label">Nom</label>
-                <input type="text" class="form-control" id="nom" name="nom" value="{{ old('nom') }}" required placeholder="Votre nom">
+                <input type="text" class="form-control" id="nom" name="nom" value="{{ old('nom') }}" required placeholder="">
             </div>
 
             <div class="mb-4">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required placeholder="Votre email">
+                <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required placeholder="">
             </div>
 
             <div class="mb-4">

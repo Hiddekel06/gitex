@@ -1,8 +1,9 @@
-<header style="position: relative; background: rgba(17, 17, 17, 0.7); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(90, 143, 76, 0.2); padding: 0.75rem 0; transition: all 0.3s ease;">
+<header style="position: relative; background: transparent; border-bottom: none; padding: 0.75rem 0; transition: all 0.3s ease; z-index: 10;">
     <div class="d-flex align-items-center gap-3 header-left-align">
-        <img src="/images/logogitex.png" alt="Logo" style="height:44px; width:auto; display:block; filter: drop-shadow(0 0 4px rgba(90,143,76,0.4)); transition: filter 0.3s, transform 0.2s;">
-        <h1 class="h5 mb-0 fw-semibold" style="color: #fff; letter-spacing: -0.3px; transition: text-shadow 0.3s;">Gov'Athon</h1>
+        <img src="/images/logoGov.png" alt="Logo" style="height: 74px; width: auto; display: block; filter: drop-shadow(0 0 4px rgba(90,143,76,0.4)); transition: filter 0.3s, transform 0.2s;">
     </div>
+
+    <div class="header-neon-bar"></div>
 </header>
 
 <style>
@@ -35,4 +36,10 @@
             justify-content: flex-start !important;
         }
     }
+    @keyframes neonBar {
+        0% { background-position: 0% 50%; filter: brightness(1.1) drop-shadow(0 0 6px #ffe066); }
+        50% { background-position: 100% 50%; filter: brightness(1.4) drop-shadow(0 0 16px #ffd600); }
+        100% { background-position: 0% 50%; filter: brightness(1.1) drop-shadow(0 0 6px #ffe066); }
+    }
+
 </style>

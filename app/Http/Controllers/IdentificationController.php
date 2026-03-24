@@ -11,8 +11,8 @@ class IdentificationController extends Controller
 
     public function showForm()
     {
-        // On ne propose que les équipes non utilisées
-        $equipesUtilisees = User::pluck('equipe_id')->toArray();
+        // On ne propose que les équipes non utilisées par un utilisateur ayant terminé le questionnaire
+        $equipesUtilisees = User::where('completed', true)->pluck('equipe_id')->toArray();
         $equipes = Equipe::whereNotIn('id', $equipesUtilisees)->get();
         return view('identification', compact('equipes'));
     }
@@ -26,26 +26,18 @@ class IdentificationController extends Controller
             'equipe_id' => 'required|exists:equipes,id',
         ]);
 
-        // Vérifier si l'équipe est déjà utilisée
-        $equipeDejaUtilisee = User::where('equipe_id', $validated['equipe_id'])->exists();
-        if ($equipeDejaUtilisee) {
-            return back()->withErrors(['equipe_id' => 'Cette équipe a déjà été utilisée.'])->withInput();
-        }
-
         // On flush la session pour éviter toute collision d'utilisateur précédent
         $request->session()->flush();
 
-        // Créer l'utilisateur (on ne stocke que l'email et l'équipe, nom/prénom si besoin)
-        $user = User::create([
-            'name' => $validated['prenom'] . ' ' . $validated['nom'],
-            'email' => $validated['email'],
-            'password' => '', // Pas de mot de passe requis
-            'equipe_id' => $validated['equipe_id'],
+        // Créer l'utilisateur en session uniquement (pas encore en base)
+        session([
+            'identification_data' => [
+                'name' => $validated['prenom'] . ' ' . $validated['nom'],
+                'email' => $validated['email'],
+                'equipe_id' => $validated['equipe_id'],
+            ]
         ]);
 
-        // Stocker l'utilisateur en session (simple, pas d'auth Laravel)
-        session(['user_id' => $user->id]);
-
-        return redirect()->route('questions.index'); // À adapter selon la suite
+        return redirect()->route('questions.index');
     }
 }

@@ -11,6 +11,7 @@
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
             background: radial-gradient(circle at 20% 30%, #0a0c0a, #030303);
             min-height: 100vh;
+               background: url('/images/background.jpg') center center / cover no-repeat fixed;
         }
         .grain {
             position: fixed;
