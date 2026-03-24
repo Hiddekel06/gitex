@@ -397,186 +397,102 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // ========== Gestion des toggles (justification / int) ==========
-        @foreach($questions as $question)
-            @if($question->has_justification)
-                (function() {
-                    const ouiRadio = document.getElementById('q{{ $question->id }}_oui');
-                    const nonRadio = document.getElementById('q{{ $question->id }}_non');
-                    const justifBlock = document.getElementById('justif_block_{{ $question->id }}');
-                    const justifInput = document.getElementById('justification_{{ $question->id }}');
-                    function updateJustifBlock() {
-                        if (nonRadio && nonRadio.checked) {
-                            justifBlock.style.display = '';
-                            justifBlock.hidden = false;
-                            justifInput.setAttribute('required', 'required');
-                        } else {
-                            justifBlock.style.display = 'none';
-                            justifBlock.hidden = true;
-                            justifInput.removeAttribute('required');
-                        }
-                    }
-                    if (ouiRadio) ouiRadio.addEventListener('change', updateJustifBlock, false);
-                    if (nonRadio) nonRadio.addEventListener('change', updateJustifBlock, false);
-                    // Affichage initial (utile si retour arrière ou validation échouée)
-                    setTimeout(updateJustifBlock, 0);
-                })();
-            @endif
-            @if($question->type_reponse === 'int')
-                (function() {
-                    const ouiBtn = document.getElementById('q{{ $question->id }}_oui');
-                    const nonBtn = document.getElementById('q{{ $question->id }}_non');
-                    const intBlock = document.getElementById('int_block_{{ $question->id }}');
-                    function updateIntBlock() {
-                        if (ouiBtn && ouiBtn.checked) {
-                            intBlock.style.display = 'block';
-                        } else {
-                            intBlock.style.display = 'none';
-                        }
-                    }
-                    if (ouiBtn) ouiBtn.addEventListener('change', updateIntBlock, false);
-                    if (nonBtn) nonBtn.addEventListener('change', updateIntBlock, false);
-                    setTimeout(updateIntBlock, 0);
-                })();
-            @endif
-        @endforeach
-
-        // ========== PROGRESSION EN TEMPS RÉEL ==========
-        function updateProgress() {
-            const totalQuestions = {{ count($questions) }};
-            let answered = 0;
-
-            // Pour chaque question, on vérifie si elle a une réponse valide
-            @foreach($questions as $question)
-                @if($question->type_question === 'direct')
-                    // Input direct (text/number)
-                    (function() {
-                        var directInput_{{ $question->id }} = document.getElementById('{{ $question->type_reponse === 'int' ? 'int_value_' . $question->id : 'reponse_' . $question->id }}');
-                        if (directInput_{{ $question->id }} && directInput_{{ $question->id }}.value.trim() !== '') {
-                            answered++;
-                        }
-                    })();
-                @else
-                    (function() {
-                        var radioOui_{{ $question->id }} = document.getElementById('q{{ $question->id }}_oui');
-                        var radioNon_{{ $question->id }} = document.getElementById('q{{ $question->id }}_non');
-                        if (radioOui_{{ $question->id }} && radioNon_{{ $question->id }} && (radioOui_{{ $question->id }}.checked || radioNon_{{ $question->id }}.checked)) {
-                            answered++;
-                        }
-                    })();
-                @endif
-            @endforeach
-
-            const percent = totalQuestions === 0 ? 0 : Math.round((answered / totalQuestions) * 100);
-            document.getElementById('answeredCount').innerText = answered;
-            const fill = document.getElementById('progressFill');
-            const percentSpan = document.getElementById('progressPercent');
-            if (fill) fill.style.width = percent + '%';
-            if (percentSpan) percentSpan.innerText = percent + '%';
-        }
-
-        // Écouter les changements sur tous les champs du formulaire
-        const form = document.getElementById('questionForm');
-        form.addEventListener('change', updateProgress);
-        form.addEventListener('input', updateProgress); // pour les champs texte
-        updateProgress(); // initial
-
-        // ========== PROTECTION DOUBLE ENVOI AVEC ANIMATION ==========
-        const submitBtn = document.getElementById('submitBtn');
-        if (form && submitBtn) {
-            form.addEventListener('submit', function(e) {
-                if (submitBtn.disabled) return;
-                submitBtn.disabled = true;
-                submitBtn.innerText = '✨ Envoi en cours...';
-                // On peut ajouter un spinner personnalisé (optionnel)
-            });
-        }
-
-        // ========== ANIMATION DES BLOCS DYNAMIQUES ==========
-        // Ajoute une classe pour l'apparition fluide (déjà gérée par CSS)
-    });
-</script>
-
-@push('scripts')
-<script>
 document.addEventListener('DOMContentLoaded', function () {
 
     const form = document.getElementById('questionForm');
     const allCards = document.querySelectorAll('.question-card');
     const submitBtn = document.getElementById('submitBtn');
 
+    if (!allCards.length) return;
+
     // =========================
-    // 🔹 GESTION Q1 (LOGIQUE MÉTIER)
+    // 🔹 QUESTION 1 (LOGIQUE PRINCIPALE)
     // =========================
     const firstCard = allCards[0];
     const firstQuestionId = firstCard.dataset.questionId;
-    const firstRadios = document.querySelectorAll(`input[name="reponse[${firstQuestionId}]"]`);
 
-    function toggleRequired(state) {
+    const firstRadios = document.querySelectorAll(
+        `input[name="reponse[${firstQuestionId}]"]`
+    );
+
+    function disableOtherQuestions(disable = true) {
         allCards.forEach((card, index) => {
-            if (index !== 0) {
-                const inputs = card.querySelectorAll('input, select, textarea');
-                inputs.forEach(input => {
-                    if (state) {
-                        input.removeAttribute('required');
-                    } else {
-                        if (input.classList.contains('radio-option') || input.classList.contains('question-input')) {
-                            input.setAttribute('required', 'required');
-                        }
-                    }
-                });
-            }
+            if (index === 0) return;
+
+            const inputs = card.querySelectorAll('input, select, textarea');
+
+            inputs.forEach(input => {
+                if (disable) {
+                    input.removeAttribute('required');
+                    input.checked = false;
+                    input.value = '';
+                }
+            });
         });
     }
 
     function handleFirstQuestion() {
         let selected = null;
-        firstRadios.forEach(r => { if (r.checked) selected = r.value; });
+
+        firstRadios.forEach(r => {
+            if (r.checked) selected = r.value;
+        });
 
         if (selected === 'non') {
+            // 🔴 MASQUER toutes les autres questions
             allCards.forEach((card, index) => {
-                card.style.display = index === 0 ? '' : 'none';
+                card.style.display = (index === 0) ? '' : 'none';
             });
 
-            toggleRequired(true);
+            disableOtherQuestions(true);
+
             submitBtn.innerText = "Valider et terminer";
         } else {
-            allCards.forEach(card => card.style.display = '');
-            toggleRequired(false);
+            // 🟢 AFFICHER toutes les questions
+            allCards.forEach(card => {
+                card.style.display = '';
+            });
+
             submitBtn.innerText = "Valider le formulaire";
         }
+
+        updateProgress();
     }
 
-    firstRadios.forEach(r => r.addEventListener('change', handleFirstQuestion));
+    firstRadios.forEach(r => {
+        r.addEventListener('change', handleFirstQuestion);
+    });
 
     // =========================
     // 🔹 JUSTIFICATION + INT
     // =========================
+    allCards.forEach((card) => {
 
-    document.querySelectorAll('.question-card').forEach((card, idx) => {
         const qid = card.dataset.questionId;
+
         const oui = document.getElementById(`q${qid}_oui`);
         const non = document.getElementById(`q${qid}_non`);
+
         const justifBlock = document.getElementById(`justif_block_${qid}`);
         const justifInput = document.getElementById(`justification_${qid}`);
+
         const intBlock = document.getElementById(`int_block_${qid}`);
 
         function updateDynamicFields() {
+
+            if (card.style.display === 'none') return;
+
             // JUSTIFICATION
             if (justifBlock && justifInput) {
                 if (non && non.checked) {
                     justifBlock.style.display = 'block';
-                    if (idx === 0) {
-                        justifInput.setAttribute('required', 'required'); // obligatoire SEULEMENT pour la première question
-                    } else {
-                        justifInput.removeAttribute('required'); // jamais obligatoire pour les autres
-                    }
+                    justifInput.setAttribute('required', 'required');
                 } else {
                     justifBlock.style.display = 'none';
                     justifInput.removeAttribute('required');
                 }
             }
+
             // INT
             if (intBlock) {
                 if (oui && oui.checked) {
@@ -589,6 +505,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (oui) oui.addEventListener('change', updateDynamicFields);
         if (non) non.addEventListener('change', updateDynamicFields);
+
         updateDynamicFields();
     });
 
@@ -596,12 +513,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // 🔹 PROGRESSION
     // =========================
     function updateProgress() {
-        const total = allCards.length;
+        let total = 0;
         let answered = 0;
 
         allCards.forEach(card => {
 
             if (card.style.display === 'none') return;
+
+            total++;
 
             const inputs = card.querySelectorAll('input');
 
@@ -642,7 +561,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // =========================
     handleFirstQuestion();
     updateProgress();
+
 });
 </script>
-@endpush
+
 @endsection
