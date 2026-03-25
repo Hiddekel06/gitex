@@ -7,9 +7,22 @@ use App\Models\Equipe;
 use App\Models\User;
 use App\Models\Question;
 use App\Models\ReponseUtilisateur;
+use App\Exports\EquipesExport;
+use Maatwebsite\Excel\Facades\Excel;
+
+
 
 class AdminDashboardController extends Controller
 {
+    public function exportEquipesExcel()
+    {
+        $equipes = \App\Models\Equipe::with('users')->get();
+        $questions = \App\Models\Question::all();
+        $userIds = $equipes->flatMap(function($e) { return $e->users->pluck('id'); });
+        $reponses = \App\Models\ReponseUtilisateur::whereIn('user_id', $userIds)->get();
+        $export = new EquipesExport($equipes, $questions, $reponses);
+        return Excel::download($export, 'equipes.xlsx');
+    }
         public function equipes()
         {
             $equipes = \App\Models\Equipe::with('users')->get();

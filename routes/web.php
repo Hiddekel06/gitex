@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminDashboardController;
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 Route::get('/admin/dashboard/equipes', [AdminDashboardController::class, 'equipes'])->name('admin.dashboard.equipes');
+Route::get('/admin/dashboard/equipes/export', [AdminDashboardController::class, 'exportEquipesExcel'])->name('admin.dashboard.equipes.export');
 
 // Routes admin
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
