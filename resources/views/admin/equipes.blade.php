@@ -11,9 +11,9 @@
             <table class="table table-dark table-bordered align-middle">
                 <thead>
                     <tr>
-                        <th style="color:#b94a48; background:transparent;">Équipe</th>
+                        <th style="color:#fff; background:transparent;">Équipe</th>
                         @foreach($questions as $question)
-                            <th style="color:#b94a48; background:transparent; min-width:180px;">{{ $question->intitule }}</th>
+                            <th style="color:#fff; background:transparent; min-width:180px;">{{ $question->intitule }}</th>
                         @endforeach
                     </tr>
                 </thead>
@@ -34,7 +34,6 @@
                                         $rep = $reponses->where('user_id', $user->id)->where('question_id', $question->id)->first();
                                     @endphp
                                     <div style="margin-bottom:0.5em;">
-                                        <span style="font-weight:500; color:#e9f5e9;">{{ $user->name }}</span> :
                                         <span>{{ $rep ? $rep->reponse : '-' }}</span>
                                         @if($rep && $rep->justification)
                                             <span class="text-info">(Justif: {{ $rep->justification }})</span>
