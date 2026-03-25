@@ -11,49 +11,44 @@
             <table class="table table-dark table-bordered align-middle">
                 <thead>
                     <tr>
-                        <th>Équipe</th>
-                        <th>Membres</th>
-                        <th>Réponses</th>
+                        <th style="color:#b94a48; background:transparent;">Équipe</th>
+                        @foreach($questions as $question)
+                            <th style="color:#b94a48; background:transparent; min-width:180px;">{{ $question->intitule }}</th>
+                        @endforeach
                     </tr>
                 </thead>
                 <tbody>
                 @forelse($equipes as $equipe)
                     <tr>
-                        <td style="font-weight:600; color:#b6f7b6;">{{ $equipe->nom }}</td>
-                        <td>
+                        <td style="font-weight:600; color:#b6f7b6; min-width:120px;">{{ $equipe->nom }}<br>
                             <ul class="mb-0" style="list-style:none; padding-left:0;">
                                 @foreach($equipe->users as $user)
-                                    <li>{{ $user->name }} <span class="text-muted" style="font-size:0.9em;">({{ $user->email }})</span></li>
+                                    <li style="font-size:0.95em; color:#fff;">{{ $user->name }} <span class="text-muted" style="font-size:0.9em;">({{ $user->email }})</span></li>
                                 @endforeach
                             </ul>
                         </td>
-                        <td>
-                            @foreach($equipe->users as $user)
-                                <div style="margin-bottom:0.7em;">
-                                    <div style="font-weight:500; color:#e9f5e9;">{{ $user->name }}</div>
-                                    <ul style="margin-bottom:0.3em;">
-                                        @foreach($questions as $question)
-                                            @php
-                                                $rep = $reponses->where('user_id', $user->id)->where('question_id', $question->id)->first();
-                                            @endphp
-                                            <li>
-                                                <span style="color:#ffe066;">{{ $question->intitule }}:</span>
-                                                <span>{{ $rep ? $rep->reponse : '-' }}</span>
-                                                @if($rep && $rep->justification)
-                                                    <span class="text-info">(Justif: {{ $rep->justification }})</span>
-                                                @endif
-                                                @if($rep && $rep->int_value !== null)
-                                                    <span class="text-warning">[Num: {{ $rep->int_value }}]</span>
-                                                @endif
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endforeach
-                        </td>
+                        @foreach($questions as $question)
+                            <td style="vertical-align:top;">
+                                @foreach($equipe->users as $user)
+                                    @php
+                                        $rep = $reponses->where('user_id', $user->id)->where('question_id', $question->id)->first();
+                                    @endphp
+                                    <div style="margin-bottom:0.5em;">
+                                        <span style="font-weight:500; color:#e9f5e9;">{{ $user->name }}</span> :
+                                        <span>{{ $rep ? $rep->reponse : '-' }}</span>
+                                        @if($rep && $rep->justification)
+                                            <span class="text-info">(Justif: {{ $rep->justification }})</span>
+                                        @endif
+                                        @if($rep && $rep->int_value !== null)
+                                            <span class="text-warning">[Num: {{ $rep->int_value }}]</span>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </td>
+                        @endforeach
                     </tr>
                 @empty
-                    <tr><td colspan="3" class="text-center">Aucune équipe trouvée.</td></tr>
+                    <tr><td colspan="{{ 1 + $questions->count() }}" class="text-center">Aucune équipe trouvée.</td></tr>
                 @endforelse
                 </tbody>
             </table>
