@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-5">
-    <div class="card shadow p-4 mx-auto" style="max-width: 1100px; border-radius: 22px; background: rgba(34,34,34,0.97); border: 1px solid #2c2c2c;">
+<div class="container-fluid py-5">
+    <div class="card shadow p-4" style="border-radius: 22px; background: rgba(34,34,34,0.97); border: 1px solid #2c2c2c;">
         <h2 class="mb-4 text-center" style="color:#e9f5e9; font-weight:600;">Liste des équipes (vue groupée)</h2>
         <div class="mb-4 text-center">
         </div>
-        <div class="table-responsive mt-4">
-            <table class="table table-dark table-bordered align-middle">
+        <div class="table-responsive mt-4" style="overflow-x:auto;">
+            <table class="table table-dark table-bordered align-middle w-100" style="min-width:1200px;">
                 <thead>
                     <tr>
                         <th style="color:#fff; background:transparent;">Équipe</th>
