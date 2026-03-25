@@ -10,6 +10,14 @@ use App\Models\ReponseUtilisateur;
 
 class AdminDashboardController extends Controller
 {
+        public function equipes()
+        {
+            $equipes = \App\Models\Equipe::with('users')->get();
+            $questions = \App\Models\Question::all();
+            $userIds = $equipes->flatMap(function($e) { return $e->users->pluck('id'); });
+            $reponses = \App\Models\ReponseUtilisateur::whereIn('user_id', $userIds)->get();
+            return view('admin.equipes', compact('equipes', 'questions', 'reponses'));
+        }
     public function index(Request $request)
     {
         $equipes = Equipe::all();

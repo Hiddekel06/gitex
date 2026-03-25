@@ -3,8 +3,15 @@
 @section('content')
 <div class="container py-5">
     <div class="card shadow p-4 mx-auto" style="max-width: 1100px; border-radius: 22px; background: rgba(34,34,34,0.97); border: 1px solid #2c2c2c;">
+
         <h2 class="mb-4 text-center" style="color:#e9f5e9; font-weight:600;">Dashboard Admin</h2>
         <p class="text-center" style="color:#b0d2a0;">Sélectionnez une équipe pour afficher ses réponses</p>
+
+        <div class="text-center mb-4">
+            <a href="{{ route('admin.dashboard.equipes') }}" class="btn btn-outline-warning" style="font-weight:600;">
+                Voir la liste complète par équipe
+            </a>
+        </div>
 
         <form method="GET" action="{{ route('admin.dashboard') }}" class="mb-4 d-flex justify-content-center align-items-center gap-3">
             <select name="equipe_id" class="form-select" style="max-width: 320px;">

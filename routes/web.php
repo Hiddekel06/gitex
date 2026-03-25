@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminAuthController;
 // Dashboard admin (middleware désactivé temporairement)
 use App\Http\Controllers\AdminDashboardController;
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+Route::get('/admin/dashboard/equipes', [AdminDashboardController::class, 'equipes'])->name('admin.dashboard.equipes');
 
 // Routes admin
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
