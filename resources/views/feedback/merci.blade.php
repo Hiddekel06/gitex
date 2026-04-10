@@ -127,20 +127,20 @@
 
         <div class="position-relative" style="z-index:1;">
             <div class="thankyou-badge mb-3">
-                <span>Feedback recu</span>
+                <span>Feedback reçu</span>
                 <span style="opacity:.8;">-</span>
                 <span>GITEX 2026</span>
             </div>
 
-            <h2 class="title mb-3">Merci pour votre energie, vos idees et ces beaux moments partages.</h2>
+            <h2 class="title mb-3">Merci pour votre énergie, vos idées et ces beaux moments partagés.</h2>
 
             <p class="subtitle mb-4">
-                Vos reponses ont bien ete enregistrees. Ce retour d'experience nous aide a mieux preparer la suite,
-                valoriser les efforts des equipes et construire des accompagnements encore plus utiles.
+                Vos réponses ont bien été enregistrées. Ce retour d'expérience nous aide à mieux préparer la suite,
+                valoriser les efforts des équipes et construire des accompagnements encore plus utiles.
             </p>
 
             <!-- <div class="quote-box mb-4">
-                "Ce questionnaire cloture une etape, mais il ouvre surtout les prochaines opportunites."
+                "Ce questionnaire clôture une étape, mais il ouvre surtout les prochaines opportunités."
             </div> -->
 
             <div class="signature">

@@ -60,6 +60,26 @@
         background: #181818;
         border: 1px solid #343434;
         color: #fff;
+        border-radius: 14px;
+        box-shadow: 0 2px 10px -6px #000a;
+        padding-right: 2.5rem;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        position: relative;
+    }
+
+    /* Flèche custom pour le select */
+    .form-select {
+        background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="18" viewBox="0 0 20 20" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7.293 8.293a1 1 0 011.414 0L10 9.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1.2em;
+    }
+
+    .form-select:focus {
+        border-color: #5a8f4c;
+        box-shadow: 0 0 0 3px rgba(90, 143, 76, 0.18);
     }
 
     /* Placeholders blancs mais plus subtils */
@@ -86,6 +106,50 @@
         align-items: center;
         gap: 0.45rem;
         margin-right: 1rem;
+    }
+
+    .rating-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+    }
+
+    .rating-pill {
+        position: relative;
+    }
+
+    .rating-pill input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .rating-pill span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 42px;
+        height: 40px;
+        padding: 0 0.75rem;
+        border-radius: 999px;
+        border: 1px solid #3a3a3a;
+        background: #202020;
+        color: #e8e8e8;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .rating-pill span:hover {
+        border-color: #5a8f4c;
+        background: #252525;
+    }
+
+    .rating-pill input:checked + span {
+        background: linear-gradient(95deg, #5a8f4c 0%, #3f6f34 100%);
+        border-color: #74a965;
+        color: #fff;
+        box-shadow: 0 0 0 3px rgba(90, 143, 76, 0.2);
     }
 
     .coming-next {
@@ -207,18 +271,26 @@
                                             {{ $question->is_required ? 'required' : '' }}>{{ old('reponse.' . $question->id) }}</textarea>
                                     </div>
                                 @elseif($question->type_reponse === 'rating_1_5')
-                                    <select class="form-select" name="reponse[{{ $question->id }}]" {{ $question->is_required ? 'required' : '' }}>
-                                        <option value="">Selectionner une note</option>
-                                        @php
-                                            $options = $question->options_json;
-                                            if (!is_array($options) || empty($options)) {
-                                                $options = [1, 2, 3, 4, 5];
-                                            }
-                                        @endphp
-                                        @foreach($options as $option)
-                                            <option value="{{ $option }}" {{ old('reponse.' . $question->id) == $option ? 'selected' : '' }}>{{ $option }}</option>
+                                    @php
+                                        $options = $question->options_json;
+                                        if (!is_array($options) || empty($options)) {
+                                            $options = [1, 2, 3, 4, 5];
+                                        }
+                                        $oldRating = old('reponse.' . $question->id);
+                                    @endphp
+                                    <div class="rating-group">
+                                        @foreach($options as $index => $option)
+                                            <label class="rating-pill">
+                                                <input
+                                                    type="radio"
+                                                    name="reponse[{{ $question->id }}]"
+                                                    value="{{ $option }}"
+                                                    {{ (string) $oldRating === (string) $option ? 'checked' : '' }}
+                                                    {{ $question->is_required && $index === 0 ? 'required' : '' }}>
+                                                <span>{{ $option }}</span>
+                                            </label>
                                         @endforeach
-                                    </select>
+                                    </div>
                                 @elseif($question->type_reponse === 'yes_no')
                                     <label class="radio-inline">
                                         <input type="radio" name="reponse[{{ $question->id }}]" value="oui" {{ old('reponse.' . $question->id) === 'oui' ? 'checked' : '' }} {{ $question->is_required ? 'required' : '' }}>
