@@ -54,12 +54,24 @@
         margin-bottom: 0.65rem;
     }
 
+
     .form-control,
     .form-select {
         background: #181818;
         border: 1px solid #343434;
         color: #fff;
     }
+
+    /* Placeholders blancs mais plus subtils */
+    .form-control::placeholder,
+    .form-select::placeholder {
+        color: #fff !important;
+        opacity: 0.6 !important;
+    }
+    .form-control::-webkit-input-placeholder { color: #fff !important; opacity: 0.6 !important; }
+    .form-control::-moz-placeholder { color: #fff !important; opacity: 0.6 !important; }
+    .form-control:-ms-input-placeholder { color: #fff !important; opacity: 0.6 !important; }
+    .form-control::-ms-input-placeholder { color: #fff !important; opacity: 0.6 !important; }
 
     .form-control:focus,
     .form-select:focus {

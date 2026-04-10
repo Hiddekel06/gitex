@@ -156,8 +156,7 @@
                         <div class="kpi-label mb-1">Note organisation /5</div>
                         <div class="kpi-value">{{ $kpi['avgOrganizationRating'] }}</div>
                         <div class="mt-3" style="color:#a9c0a6; font-size:0.92rem;">
-                            Ces KPI sont calcules sur les soumissions enregistrees dans la table feedback_submissions.
-                        </div>
+                            Ces KPI sont calcules sur les soumissions enregistrees
                     </div>
                 </div>
             </div>
