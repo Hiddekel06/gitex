@@ -5,6 +5,7 @@ use App\Http\Controllers\QuestionsController;
 use App\Http\Controllers\IdentificationController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\FeedbackIdentificationController;
+use App\Http\Controllers\FeedbackQuestionsController;
 
 // Dashboard admin (middleware désactivé temporairement)
 use App\Http\Controllers\AdminDashboardController;
@@ -28,7 +29,4 @@ Route::post('/questions', [QuestionsController::class, 'store'])->name('question
 Route::get('/feedback/identification', [FeedbackIdentificationController::class, 'showForm'])->name('feedback.identification');
 Route::post('/feedback/identification', [FeedbackIdentificationController::class, 'submitForm'])->name('feedback.identification.submit');
 
-// Placeholder temporaire pour la prochaine etape (nouveau questionnaire feedback)
-Route::get('/feedback/questions', function () {
-	return 'Page questionnaire feedback en cours de construction.';
-})->name('feedback.questions.index');
+Route::get('/feedback/questions', [FeedbackQuestionsController::class, 'index'])->name('feedback.questions.index');

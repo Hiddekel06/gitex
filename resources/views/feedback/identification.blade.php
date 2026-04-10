@@ -139,7 +139,7 @@
     <div class="modern-card p-4 p-md-5" style="max-width: 500px; width: 100%;">
         <div class="hero-message">
             <div class="hero-title">
-                 Feedback GITEX 2026
+                 Merci GITEX 2026 !
             </div>
             <div class="hero-subtitle">
                 Identification de tous les membres de l'equipe
