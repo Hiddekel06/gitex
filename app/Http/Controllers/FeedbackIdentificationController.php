@@ -39,7 +39,9 @@ class FeedbackIdentificationController extends Controller
         }
 
         // Session dediee au nouveau flux pour eviter tout conflit avec l'ancien.
-        $request->session()->forget(['feedback_identification_data', 'feedback_user_id']);
+        // On efface aussi le flag de completion pour autoriser une nouvelle personne
+        // a repondre sur le meme device.
+        $request->session()->forget(['feedback_identification_data', 'feedback_user_id', 'feedback_completed']);
         $request->session()->put('feedback_identification_data', [
             'name' => $validated['prenom'] . ' ' . $validated['nom'],
             'email' => $validated['email'],
