@@ -6,12 +6,17 @@ use App\Http\Controllers\IdentificationController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\FeedbackIdentificationController;
 use App\Http\Controllers\FeedbackQuestionsController;
+use App\Http\Controllers\AdminFeedbackDashboardController;
 
-// Dashboard admin (middleware désactivé temporairement)
+// Dashboard admin protege par middleware
 use App\Http\Controllers\AdminDashboardController;
-Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-Route::get('/admin/dashboard/equipes', [AdminDashboardController::class, 'equipes'])->name('admin.dashboard.equipes');
-Route::get('/admin/dashboard/equipes/export', [AdminDashboardController::class, 'exportEquipesExcel'])->name('admin.dashboard.equipes.export');
+Route::middleware('admin')->group(function () {
+	Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+	Route::get('/admin/dashboard/feedback', [AdminFeedbackDashboardController::class, 'index'])->name('admin.dashboard.feedback');
+	Route::get('/admin/dashboard/feedback/reponses', [AdminFeedbackDashboardController::class, 'detailedResponses'])->name('admin.dashboard.feedback.responses');
+	Route::get('/admin/dashboard/equipes', [AdminDashboardController::class, 'equipes'])->name('admin.dashboard.equipes');
+	Route::get('/admin/dashboard/equipes/export', [AdminDashboardController::class, 'exportEquipesExcel'])->name('admin.dashboard.equipes.export');
+});
 
 // Routes admin
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');

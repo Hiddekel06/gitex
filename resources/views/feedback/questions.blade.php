@@ -251,7 +251,7 @@
             <button type="submit" class="btn btn-success w-100 mt-4">Envoyer mes reponses</button>
         </form>
 
-        <div class="coming-next p-3 mt-4">Toutes les reponses enregistrees sont rattachees a ce questionnaire feedback.</div>
+       
     </div>
 </div>
 

@@ -11,6 +11,9 @@
             <a href="{{ route('admin.dashboard.equipes') }}" class="btn btn-outline-warning" style="font-weight:600;">
                 Voir la liste complète par équipe
             </a>
+            <a href="{{ route('admin.dashboard.feedback') }}" class="btn btn-outline-info ms-2" style="font-weight:600;">
+                Ouvrir dashboard feedback
+            </a>
         </div>
 
         <form method="GET" action="{{ route('admin.dashboard') }}" class="mb-4 d-flex justify-content-center align-items-center gap-3">
