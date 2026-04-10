@@ -98,6 +98,7 @@ class FeedbackQuestionsController extends Controller
         $choices = $request->input('reponse_choice', []);
         $reponses = $request->input('reponse', []);
         $intValues = $request->input('int_value', []);
+        $nonJustifications = $request->input('justification_non', []);
 
         $errors = [];
         $rows = [];
@@ -107,6 +108,7 @@ class FeedbackQuestionsController extends Controller
             $choice = isset($choices[$questionId]) ? trim((string) $choices[$questionId]) : null;
             $reponseValue = isset($reponses[$questionId]) ? trim((string) $reponses[$questionId]) : null;
             $intValue = $intValues[$questionId] ?? null;
+            $nonJustification = isset($nonJustifications[$questionId]) ? trim((string) $nonJustifications[$questionId]) : null;
 
             if ($this->isPotentialConnectionsQuestion($question)) {
                 $triggerQuestion = $this->findContactsQuestion($questionnaire);
@@ -144,10 +146,15 @@ class FeedbackQuestionsController extends Controller
                     continue;
                 }
 
+                if ($choice === 'non' && empty($nonJustification)) {
+                    $errors["justification_non.$questionId"] = 'Veuillez justifier votre reponse.';
+                    continue;
+                }
+
                 $rows[] = [
                     'question_id' => $questionId,
                     'reponse' => $choice,
-                    'justification' => $choice === 'oui' ? $reponseValue : null,
+                    'justification' => $choice === 'oui' ? $reponseValue : ($choice === 'non' ? $nonJustification : null),
                     'int_value' => null,
                 ];
                 continue;
@@ -179,11 +186,16 @@ class FeedbackQuestionsController extends Controller
                     continue;
                 }
 
+                if ($reponseValue === 'non' && empty($nonJustification)) {
+                    $errors["justification_non.$questionId"] = 'Veuillez justifier votre reponse.';
+                    continue;
+                }
+
                 if ($reponseValue !== null && $reponseValue !== '') {
                     $rows[] = [
                         'question_id' => $questionId,
                         'reponse' => $reponseValue,
-                        'justification' => null,
+                        'justification' => $reponseValue === 'non' ? $nonJustification : null,
                         'int_value' => null,
                     ];
                 }

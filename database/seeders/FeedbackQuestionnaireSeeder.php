@@ -17,7 +17,7 @@ class FeedbackQuestionnaireSeeder extends Seeder
             ['code' => 'gitex_feedback_2026'],
             [
                 'titre' => 'Feedback GITEX Africa 2026',
-                'description' => 'Retour d\'experience sur le Gitex2026',
+                'description' => 'Retour d\'expérience sur le GITEX 2026',
                 'is_active' => true,
                 'version' => 1,
             ]
@@ -25,8 +25,8 @@ class FeedbackQuestionnaireSeeder extends Seeder
 
         $questions = [
             [
-                'section' => 'Experience globale',
-                'intitule' => 'Comment evaluez-vous votre participation globale au GITEX Africa ?',
+                'section' => 'Expérience globale',
+                'intitule' => 'Comment évaluez-vous votre participation globale au GITEX Africa ?',
                 'type_question' => 'direct',
                 'type_reponse' => 'rating_1_5',
                 'is_required' => true,
@@ -34,8 +34,8 @@ class FeedbackQuestionnaireSeeder extends Seeder
                 'options_json' => [1, 2, 3, 4, 5],
             ],
             [
-                'section' => 'Experience globale',
-                'intitule' => 'Quels ont ete les moments les plus marquants pour votre equipe ?',
+                'section' => 'Expérience globale',
+                'intitule' => 'Quels ont été les moments les plus marquants pour votre équipe ?',
                 'type_question' => 'direct',
                 'type_reponse' => 'long_text',
                 'is_required' => true,
@@ -53,7 +53,7 @@ class FeedbackQuestionnaireSeeder extends Seeder
             ],
             [
                 'section' => 'Apports et apprentissages',
-                'intitule' => 'Cette experience va-t-elle contribuer a faire evoluer votre projet ? Si oui, comment ?',
+                'intitule' => 'Cette expérience va-t-elle contribuer à faire évoluer votre projet ? Si oui, comment ?',
                 'type_question' => 'direct',
                 'type_reponse' => 'long_text',
                 'is_required' => true,
@@ -61,8 +61,8 @@ class FeedbackQuestionnaireSeeder extends Seeder
                 'options_json' => null,
             ],
             [
-                'section' => 'Opportunites et reseau',
-                'intitule' => 'Avez-vous pu etablir des contacts interessants (partenaires, investisseurs, mentors) ?',
+                'section' => 'Opportunités et réseau',
+                'intitule' => 'Avez-vous pu établir des contacts intéressants (partenaires, investisseurs, mentors) ?',
                 'type_question' => 'binaire',
                 'type_reponse' => 'yes_no',
                 'is_required' => true,
@@ -70,7 +70,7 @@ class FeedbackQuestionnaireSeeder extends Seeder
                 'options_json' => ['oui', 'non'],
             ],
             [
-                'section' => 'Opportunites et reseau',
+                'section' => 'Opportunités et réseau',
                 'intitule' => 'Ces connexions ont-elles un potentiel concret pour la suite de votre projet ?',
                 'type_question' => 'direct',
                 'type_reponse' => 'long_text',
@@ -80,7 +80,7 @@ class FeedbackQuestionnaireSeeder extends Seeder
             ],
             [
                 'section' => 'Organisation et accompagnement',
-                'intitule' => 'Comment evaluez-vous l\'organisation du deplacement et de l\'accompagnement ?',
+                'intitule' => 'Comment évaluez-vous l\'organisation du déplacement et de l\'accompagnement ?',
                 'type_question' => 'direct',
                 'type_reponse' => 'rating_1_5',
                 'is_required' => true,
@@ -89,7 +89,7 @@ class FeedbackQuestionnaireSeeder extends Seeder
             ],
             [
                 'section' => 'Organisation et accompagnement',
-                'intitule' => 'Qu\'est-ce qui a bien fonctionne ?',
+                'intitule' => 'Qu\'est-ce qui a bien fonctionné ?',
                 'type_question' => 'direct',
                 'type_reponse' => 'long_text',
                 'is_required' => true,
@@ -98,7 +98,7 @@ class FeedbackQuestionnaireSeeder extends Seeder
             ],
             [
                 'section' => 'Organisation et accompagnement',
-                'intitule' => 'Qu\'est-ce qui pourrait etre ameliore ?',
+                'intitule' => 'Qu\'est-ce qui pourrait être amélioré ?',
                 'type_question' => 'direct',
                 'type_reponse' => 'long_text',
                 'is_required' => true,
@@ -107,7 +107,7 @@ class FeedbackQuestionnaireSeeder extends Seeder
             ],
             [
                 'section' => 'Impact du Gov\'athon',
-                'intitule' => 'En quoi le Gov\'athon vous a-t-il aide a tirer profit de cette experience ?',
+                'intitule' => 'En quoi le Gov\'athon vous a-t-il aidé à tirer profit de cette expérience ?',
                 'type_question' => 'direct',
                 'type_reponse' => 'long_text',
                 'is_required' => true,
@@ -116,7 +116,7 @@ class FeedbackQuestionnaireSeeder extends Seeder
             ],
             [
                 'section' => 'Impact du Gov\'athon',
-                'intitule' => 'Recommanderiez-vous ce type d\'accompagnement a d\'autres equipes ? Pourquoi ?',
+                'intitule' => 'Recommanderiez-vous ce type d\'accompagnement à d\'autres équipes ? Pourquoi ?',
                 'type_question' => 'direct',
                 'type_reponse' => 'long_text',
                 'is_required' => true,
@@ -125,7 +125,7 @@ class FeedbackQuestionnaireSeeder extends Seeder
             ],
             [
                 'section' => 'Suite et perspectives',
-                'intitule' => 'Quelles sont vos prochaines etapes apres cet evenement ?',
+                'intitule' => 'Quelles sont vos prochaines étapes après cet événement ?',
                 'type_question' => 'direct',
                 'type_reponse' => 'long_text',
                 'is_required' => true,
@@ -134,7 +134,7 @@ class FeedbackQuestionnaireSeeder extends Seeder
             ],
             [
                 'section' => 'Feedback libre',
-                'intitule' => 'Avez-vous des suggestions ou remarques supplementaires ?',
+                'intitule' => 'Avez-vous des suggestions ou remarques supplémentaires ?',
                 'type_question' => 'direct',
                 'type_reponse' => 'long_text',
                 'is_required' => false,

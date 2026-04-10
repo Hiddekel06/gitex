@@ -212,8 +212,9 @@
                                             type="radio"
                                             name="reponse_choice[{{ $question->id }}]"
                                             value="oui"
-                                            class="js-if-yes-toggle"
+                                            class="js-if-yes-toggle js-if-no-toggle"
                                             data-target="if_yes_block_{{ $question->id }}"
+                                            data-target-non="if_no_block_{{ $question->id }}"
                                             {{ old('reponse_choice.' . $question->id) === 'oui' ? 'checked' : '' }}
                                             {{ $question->is_required ? 'required' : '' }}>
                                         <span>Oui</span>
@@ -223,8 +224,9 @@
                                             type="radio"
                                             name="reponse_choice[{{ $question->id }}]"
                                             value="non"
-                                            class="js-if-yes-toggle"
+                                            class="js-if-yes-toggle js-if-no-toggle"
                                             data-target="if_yes_block_{{ $question->id }}"
+                                            data-target-non="if_no_block_{{ $question->id }}"
                                             {{ old('reponse_choice.' . $question->id) === 'non' ? 'checked' : '' }}
                                             {{ $question->is_required ? 'required' : '' }}>
                                         <span>Non</span>
@@ -237,6 +239,14 @@
                                             name="reponse[{{ $question->id }}]"
                                             placeholder="Comment ?"
                                             {{ $question->is_required ? 'required' : '' }}>{{ old('reponse.' . $question->id) }}</textarea>
+                                    </div>
+
+                                    <div id="if_no_block_{{ $question->id }}" class="why-block">
+                                        <textarea
+                                            class="form-control"
+                                            rows="4"
+                                            name="justification_non[{{ $question->id }}]"
+                                            placeholder="Pouvez-vous justifier votre réponse ?">{{ old('justification_non.' . $question->id) }}</textarea>
                                     </div>
                                 @elseif(str_contains(strtolower($question->intitule), 'recommanderiez-vous ce type d') && str_contains(strtolower($question->intitule), 'pourquoi'))
                                     <label class="radio-inline">
@@ -293,13 +303,35 @@
                                     </div>
                                 @elseif($question->type_reponse === 'yes_no')
                                     <label class="radio-inline">
-                                        <input type="radio" name="reponse[{{ $question->id }}]" value="oui" {{ old('reponse.' . $question->id) === 'oui' ? 'checked' : '' }} {{ $question->is_required ? 'required' : '' }}>
+                                        <input
+                                            type="radio"
+                                            name="reponse[{{ $question->id }}]"
+                                            value="oui"
+                                            class="js-if-no-toggle"
+                                            data-target-non="if_no_block_{{ $question->id }}"
+                                            {{ old('reponse.' . $question->id) === 'oui' ? 'checked' : '' }}
+                                            {{ $question->is_required ? 'required' : '' }}>
                                         <span>Oui</span>
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="reponse[{{ $question->id }}]" value="non" {{ old('reponse.' . $question->id) === 'non' ? 'checked' : '' }} {{ $question->is_required ? 'required' : '' }}>
+                                        <input
+                                            type="radio"
+                                            name="reponse[{{ $question->id }}]"
+                                            value="non"
+                                            class="js-if-no-toggle"
+                                            data-target-non="if_no_block_{{ $question->id }}"
+                                            {{ old('reponse.' . $question->id) === 'non' ? 'checked' : '' }}
+                                            {{ $question->is_required ? 'required' : '' }}>
                                         <span>Non</span>
                                     </label>
+
+                                    <div id="if_no_block_{{ $question->id }}" class="why-block">
+                                        <textarea
+                                            class="form-control"
+                                            rows="4"
+                                            name="justification_non[{{ $question->id }}]"
+                                            placeholder="Pouvez-vous justifier votre réponse ?">{{ old('justification_non.' . $question->id) }}</textarea>
+                                    </div>
                                 @elseif($question->type_reponse === 'long_text')
                                     <textarea
                                         class="form-control"
@@ -493,6 +525,52 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     updateIfYesBlocks();
+
+    const ifNoToggles = Array.from(document.querySelectorAll('.js-if-no-toggle'));
+
+    function updateIfNoBlocks() {
+        const groups = {};
+
+        ifNoToggles.forEach((radio) => {
+            const targetId = radio.dataset.targetNon;
+            if (!targetId) {
+                return;
+            }
+            if (!groups[targetId]) {
+                groups[targetId] = [];
+            }
+            groups[targetId].push(radio);
+        });
+
+        Object.keys(groups).forEach((targetId) => {
+            const block = document.getElementById(targetId);
+            if (!block) {
+                return;
+            }
+
+            const radios = groups[targetId];
+            const selected = radios.find((radio) => radio.checked);
+            const show = !!selected && selected.value === 'non';
+            const textarea = block.querySelector('textarea');
+
+            block.style.display = show ? 'block' : 'none';
+
+            if (textarea) {
+                if (show) {
+                    textarea.setAttribute('required', 'required');
+                } else {
+                    textarea.removeAttribute('required');
+                    textarea.value = '';
+                }
+            }
+        });
+    }
+
+    ifNoToggles.forEach((radio) => {
+        radio.addEventListener('change', updateIfNoBlocks);
+    });
+
+    updateIfNoBlocks();
 });
 </script>
 @endsection
