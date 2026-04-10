@@ -30,3 +30,5 @@ Route::get('/feedback/identification', [FeedbackIdentificationController::class,
 Route::post('/feedback/identification', [FeedbackIdentificationController::class, 'submitForm'])->name('feedback.identification.submit');
 
 Route::get('/feedback/questions', [FeedbackQuestionsController::class, 'index'])->name('feedback.questions.index');
+Route::post('/feedback/questions', [FeedbackQuestionsController::class, 'store'])->name('feedback.questions.store');
+Route::get('/feedback/merci', [FeedbackQuestionsController::class, 'thankYou'])->name('feedback.thankyou');

@@ -82,6 +82,11 @@
         background: rgba(40, 40, 40, 0.65);
         color: #d2d2d2;
     }
+
+    .why-block {
+        margin-top: 0.8rem;
+        display: none;
+    }
 </style>
 
 <div class="container feedback-container py-4 py-md-5">
@@ -91,13 +96,24 @@
             <p class="feedback-subtitle mb-4">{{ $questionnaire->description }}</p>
         @endif
 
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="identity-box p-3 mb-4">
             <div><strong>Membre:</strong> {{ $identification['name'] }}</div>
             <div><strong>Email:</strong> {{ $identification['email'] }}</div>
             <div><strong>Equipe:</strong> {{ $equipeNom ?: 'N/A' }}</div>
         </div>
 
-        <form>
+        <form method="POST" action="{{ route('feedback.questions.store') }}">
+            @csrf
             @php $globalIndex = 1; @endphp
 
             @foreach($questionsBySection as $section => $sectionQuestions)
@@ -106,7 +122,7 @@
 
                     <div class="d-grid gap-3">
                         @foreach($sectionQuestions as $question)
-                            <div class="question-card">
+                            <div class="question-card" data-question-text="{{ $question->intitule }}">
                                 <div class="question-label">
                                     {{ $globalIndex }}. {{ $question->intitule }}
                                     @if($question->is_required)
@@ -114,7 +130,71 @@
                                     @endif
                                 </div>
 
-                                @if($question->type_reponse === 'rating_1_5')
+                                @if(str_contains(strtolower($question->intitule), 'cette experience va-t-elle contribuer') && str_contains(strtolower($question->intitule), 'si oui, comment'))
+                                    <label class="radio-inline">
+                                        <input
+                                            type="radio"
+                                            name="reponse_choice[{{ $question->id }}]"
+                                            value="oui"
+                                            class="js-if-yes-toggle"
+                                            data-target="if_yes_block_{{ $question->id }}"
+                                            {{ old('reponse_choice.' . $question->id) === 'oui' ? 'checked' : '' }}
+                                            {{ $question->is_required ? 'required' : '' }}>
+                                        <span>Oui</span>
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input
+                                            type="radio"
+                                            name="reponse_choice[{{ $question->id }}]"
+                                            value="non"
+                                            class="js-if-yes-toggle"
+                                            data-target="if_yes_block_{{ $question->id }}"
+                                            {{ old('reponse_choice.' . $question->id) === 'non' ? 'checked' : '' }}
+                                            {{ $question->is_required ? 'required' : '' }}>
+                                        <span>Non</span>
+                                    </label>
+
+                                    <div id="if_yes_block_{{ $question->id }}" class="why-block">
+                                        <textarea
+                                            class="form-control"
+                                            rows="4"
+                                            name="reponse[{{ $question->id }}]"
+                                            placeholder="Comment ?"
+                                            {{ $question->is_required ? 'required' : '' }}>{{ old('reponse.' . $question->id) }}</textarea>
+                                    </div>
+                                @elseif(str_contains(strtolower($question->intitule), 'recommanderiez-vous ce type d') && str_contains(strtolower($question->intitule), 'pourquoi'))
+                                    <label class="radio-inline">
+                                        <input
+                                            type="radio"
+                                            name="reponse_choice[{{ $question->id }}]"
+                                            value="oui"
+                                            class="js-why-toggle"
+                                            data-target="why_block_{{ $question->id }}"
+                                            {{ old('reponse_choice.' . $question->id) === 'oui' ? 'checked' : '' }}
+                                            {{ $question->is_required ? 'required' : '' }}>
+                                        <span>Oui</span>
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input
+                                            type="radio"
+                                            name="reponse_choice[{{ $question->id }}]"
+                                            value="non"
+                                            class="js-why-toggle"
+                                            data-target="why_block_{{ $question->id }}"
+                                            {{ old('reponse_choice.' . $question->id) === 'non' ? 'checked' : '' }}
+                                            {{ $question->is_required ? 'required' : '' }}>
+                                        <span>Non</span>
+                                    </label>
+
+                                    <div id="why_block_{{ $question->id }}" class="why-block">
+                                        <textarea
+                                            class="form-control"
+                                            rows="4"
+                                            name="reponse[{{ $question->id }}]"
+                                            placeholder="Pourquoi ?"
+                                            {{ $question->is_required ? 'required' : '' }}>{{ old('reponse.' . $question->id) }}</textarea>
+                                    </div>
+                                @elseif($question->type_reponse === 'rating_1_5')
                                     <select class="form-select" name="reponse[{{ $question->id }}]" {{ $question->is_required ? 'required' : '' }}>
                                         <option value="">Selectionner une note</option>
                                         @php
@@ -124,16 +204,16 @@
                                             }
                                         @endphp
                                         @foreach($options as $option)
-                                            <option value="{{ $option }}">{{ $option }}</option>
+                                            <option value="{{ $option }}" {{ old('reponse.' . $question->id) == $option ? 'selected' : '' }}>{{ $option }}</option>
                                         @endforeach
                                     </select>
                                 @elseif($question->type_reponse === 'yes_no')
                                     <label class="radio-inline">
-                                        <input type="radio" name="reponse[{{ $question->id }}]" value="oui" {{ $question->is_required ? 'required' : '' }}>
+                                        <input type="radio" name="reponse[{{ $question->id }}]" value="oui" {{ old('reponse.' . $question->id) === 'oui' ? 'checked' : '' }} {{ $question->is_required ? 'required' : '' }}>
                                         <span>Oui</span>
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="reponse[{{ $question->id }}]" value="non" {{ $question->is_required ? 'required' : '' }}>
+                                        <input type="radio" name="reponse[{{ $question->id }}]" value="non" {{ old('reponse.' . $question->id) === 'non' ? 'checked' : '' }} {{ $question->is_required ? 'required' : '' }}>
                                         <span>Non</span>
                                     </label>
                                 @elseif($question->type_reponse === 'long_text')
@@ -142,7 +222,7 @@
                                         rows="4"
                                         name="reponse[{{ $question->id }}]"
                                         placeholder="Votre reponse"
-                                        {{ $question->is_required ? 'required' : '' }}></textarea>
+                                        {{ $question->is_required ? 'required' : '' }}>{{ old('reponse.' . $question->id) }}</textarea>
                                 @elseif($question->type_reponse === 'int')
                                     <input
                                         type="number"
@@ -150,6 +230,7 @@
                                         name="int_value[{{ $question->id }}]"
                                         min="0"
                                         step="1"
+                                        value="{{ old('int_value.' . $question->id) }}"
                                         {{ $question->is_required ? 'required' : '' }}>
                                 @else
                                     <input
@@ -157,6 +238,7 @@
                                         class="form-control"
                                         name="reponse[{{ $question->id }}]"
                                         placeholder="Votre reponse"
+                                        value="{{ old('reponse.' . $question->id) }}"
                                         {{ $question->is_required ? 'required' : '' }}>
                                 @endif
                             </div>
@@ -165,11 +247,168 @@
                     </div>
                 </div>
             @endforeach
+
+            <button type="submit" class="btn btn-success w-100 mt-4">Envoyer mes reponses</button>
         </form>
 
-        <div class="coming-next p-3 mt-4">
-            Affichage termine: la sauvegarde des reponses sera branchee a l'etape suivante.
-        </div>
+        <div class="coming-next p-3 mt-4">Toutes les reponses enregistrees sont rattachees a ce questionnaire feedback.</div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const cards = Array.from(document.querySelectorAll('.question-card'));
+
+    const normalize = (text) => {
+        return (text || '')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
+    };
+
+    const triggerNeedle = normalize('Avez-vous pu etablir des contacts interessants');
+    const dependentNeedle = normalize('Ces connexions ont-elles un potentiel concret pour la suite de votre projet');
+
+    const triggerCard = cards.find((card) => normalize(card.dataset.questionText).includes(triggerNeedle));
+    const dependentCard = cards.find((card) => normalize(card.dataset.questionText).includes(dependentNeedle));
+
+    const triggerYes = triggerCard ? triggerCard.querySelector('input[type="radio"][value="oui"]') : null;
+    const triggerNo = triggerCard ? triggerCard.querySelector('input[type="radio"][value="non"]') : null;
+
+    const dependentInputs = dependentCard ? Array.from(dependentCard.querySelectorAll('input, textarea, select')) : [];
+    dependentInputs.forEach((input) => {
+        input.dataset.originalRequired = input.required ? '1' : '0';
+    });
+
+    function setDependentVisibility(show) {
+        if (!dependentCard) {
+            return;
+        }
+
+        dependentCard.style.display = show ? '' : 'none';
+
+        dependentInputs.forEach((input) => {
+            if (show) {
+                if (input.dataset.originalRequired === '1') {
+                    input.setAttribute('required', 'required');
+                }
+            } else {
+                input.removeAttribute('required');
+                if (input.type === 'radio' || input.type === 'checkbox') {
+                    input.checked = false;
+                } else {
+                    input.value = '';
+                }
+            }
+        });
+    }
+
+    function updateConditionalQuestion() {
+        if (triggerYes && triggerYes.checked) {
+            setDependentVisibility(true);
+            return;
+        }
+
+        if (triggerNo && triggerNo.checked) {
+            setDependentVisibility(false);
+            return;
+        }
+
+        setDependentVisibility(false);
+    }
+
+    if (triggerCard) {
+        triggerCard.querySelectorAll('input[type="radio"]').forEach((radio) => {
+            radio.addEventListener('change', updateConditionalQuestion);
+        });
+    }
+
+    updateConditionalQuestion();
+
+    const whyToggles = Array.from(document.querySelectorAll('.js-why-toggle'));
+
+    function updateWhyBlocks() {
+        const groups = {};
+
+        whyToggles.forEach((radio) => {
+            const targetId = radio.dataset.target;
+            if (!groups[targetId]) {
+                groups[targetId] = [];
+            }
+            groups[targetId].push(radio);
+        });
+
+        Object.keys(groups).forEach((targetId) => {
+            const block = document.getElementById(targetId);
+            if (!block) {
+                return;
+            }
+
+            const radios = groups[targetId];
+            const isSelected = radios.some((radio) => radio.checked);
+            const textarea = block.querySelector('textarea');
+
+            block.style.display = isSelected ? 'block' : 'none';
+
+            if (textarea) {
+                if (isSelected) {
+                    textarea.setAttribute('required', 'required');
+                } else {
+                    textarea.removeAttribute('required');
+                    textarea.value = '';
+                }
+            }
+        });
+    }
+
+    whyToggles.forEach((radio) => {
+        radio.addEventListener('change', updateWhyBlocks);
+    });
+
+    updateWhyBlocks();
+
+    const ifYesToggles = Array.from(document.querySelectorAll('.js-if-yes-toggle'));
+
+    function updateIfYesBlocks() {
+        const groups = {};
+
+        ifYesToggles.forEach((radio) => {
+            const targetId = radio.dataset.target;
+            if (!groups[targetId]) {
+                groups[targetId] = [];
+            }
+            groups[targetId].push(radio);
+        });
+
+        Object.keys(groups).forEach((targetId) => {
+            const block = document.getElementById(targetId);
+            if (!block) {
+                return;
+            }
+
+            const radios = groups[targetId];
+            const selected = radios.find((radio) => radio.checked);
+            const show = !!selected && selected.value === 'oui';
+            const textarea = block.querySelector('textarea');
+
+            block.style.display = show ? 'block' : 'none';
+
+            if (textarea) {
+                if (show) {
+                    textarea.setAttribute('required', 'required');
+                } else {
+                    textarea.removeAttribute('required');
+                    textarea.value = '';
+                }
+            }
+        });
+    }
+
+    ifYesToggles.forEach((radio) => {
+        radio.addEventListener('change', updateIfYesBlocks);
+    });
+
+    updateIfYesBlocks();
+});
+</script>
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Equipe;
+use App\Models\FeedbackSubmission;
 use Illuminate\Http\Request;
 
 class FeedbackIdentificationController extends Controller
@@ -23,6 +24,19 @@ class FeedbackIdentificationController extends Controller
             'email' => 'required|email|max:255',
             'equipe_id' => 'required|exists:equipes,id',
         ]);
+
+        $alreadySubmitted = FeedbackSubmission::query()
+            ->where('email', $validated['email'])
+            ->whereHas('questionnaire', function ($query) {
+                $query->where('code', 'gitex_feedback_2026');
+            })
+            ->exists();
+
+        if ($alreadySubmitted) {
+            return back()
+                ->withErrors(['email' => 'Vous avez deja soumis vos reponses.'])
+                ->withInput();
+        }
 
         // Session dediee au nouveau flux pour eviter tout conflit avec l'ancien.
         $request->session()->forget(['feedback_identification_data', 'feedback_user_id']);
