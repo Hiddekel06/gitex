@@ -1,8 +1,8 @@
-<header style="position: relative; background: transparent; border-bottom: none; padding: 0.75rem 0; transition: all 0.3s ease; z-index: 10;">
-    <div class="d-flex align-items-center gap-3 header-left-align">
-        <img src="/images/logoGov.png" alt="Logo" style="height: 74px; width: auto; display: block; filter: drop-shadow(0 0 4px rgba(90,143,76,0.4)); transition: filter 0.3s, transform 0.2s;">
-    </div>
 
+<header style="position: relative; background: transparent; border-bottom: none; padding: 0.75rem 0; transition: all 0.3s ease; z-index: 10;">
+    <div class="d-flex align-items-center gap-3 header-logo-responsive">
+        <img src="/images/logoGov.png" alt="Logo" class="logo-gov" />
+    </div>
     <div class="header-neon-bar"></div>
 </header>
 
@@ -27,13 +27,28 @@
     header:hover h1 {
         text-shadow: 0 0 6px rgba(90,143,76,0.6);
     }
+    .logo-gov {
+        height: 74px;
+        width: auto;
+        display: block;
+        margin: 0 auto;
+        filter: drop-shadow(0 0 4px rgba(90,143,76,0.4));
+        transition: filter 0.3s, transform 0.2s;
+    }
+    .header-logo-responsive {
+        justify-content: center !important;
+        margin-left: 0 !important;
+        padding-left: 0 !important;
+        width: 100%;
+    }
     @media (min-width: 768px) {
-        .header-left-align {
-            margin-left: 0 !important;
-            padding-left: 2.5vw !important;
-            max-width: none !important;
-            width: auto !important;
+        .header-logo-responsive {
             justify-content: flex-start !important;
+            padding-left: 2.5vw !important;
+            width: auto !important;
+        }
+        .logo-gov {
+            margin: 0;
         }
     }
     @keyframes neonBar {

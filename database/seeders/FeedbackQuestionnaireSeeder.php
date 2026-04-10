@@ -17,7 +17,7 @@ class FeedbackQuestionnaireSeeder extends Seeder
             ['code' => 'gitex_feedback_2026'],
             [
                 'titre' => 'Feedback GITEX Africa 2026',
-                'description' => 'Questionnaire de retour d\'experience pour tous les membres des equipes.',
+                'description' => 'Retour d\'experience sur le Gitex2026',
                 'is_active' => true,
                 'version' => 1,
             ]
