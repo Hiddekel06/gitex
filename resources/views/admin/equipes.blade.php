@@ -5,14 +5,16 @@
     <div class="card shadow p-4" style="border-radius: 22px; background: rgba(34,34,34,0.97); border: 1px solid #2c2c2c;">
         <h2 class="mb-4 text-center" style="color:#e9f5e9; font-weight:600;">Liste des équipes (vue groupée)</h2>
         <div class="mb-4 text-center">
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary">Retour au dashboard classique</a>
+        </div>
         </div>
         <div class="table-responsive mt-4" style="overflow-x:auto;">
             <table class="table table-dark table-bordered align-middle w-100" style="min-width:1200px;">
                 <thead>
                     <tr>
-                        <th style="color:#fff; background:transparent;">Équipe</th>
+                        <th style="color:#fff; background:#444; min-width:120px">Équipe</th>
                         @foreach($questions as $question)
-                            <th style="color:#fff; background:transparent; min-width:180px;">{{ $question->intitule }}</th>
+                            <th style="color:#fff; background:#444; min-width:180px;">{{ $question->intitule }}</th>
                         @endforeach
                     </tr>
                 </thead>
