@@ -90,8 +90,7 @@
                 </div>
             </div>
             <div class="d-flex gap-2">
-                <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-light">Dashboard classique</a>
-                <a href="{{ route('admin.dashboard.equipes') }}" class="btn btn-outline-warning">Vue equipes existante</a>
+
                 <a href="{{ route('admin.dashboard.feedback.responses') }}" class="btn btn-outline-info">Voir reponses detaillees</a>
             </div>
         </div>
