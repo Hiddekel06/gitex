@@ -246,7 +246,7 @@
                                             class="form-control"
                                             rows="4"
                                             name="justification_non[{{ $question->id }}]"
-                                            placeholder="Pouvez-vous justifier votre réponse ?">{{ old('justification_non.' . $question->id) }}</textarea>
+                                            placeholder="Commentaire">{{ old('justification_non.' . $question->id) }}</textarea>
                                     </div>
                                 @elseif(str_contains(strtolower($question->intitule), 'recommanderiez-vous ce type d') && str_contains(strtolower($question->intitule), 'pourquoi'))
                                     <label class="radio-inline">
@@ -277,7 +277,7 @@
                                             class="form-control"
                                             rows="4"
                                             name="reponse[{{ $question->id }}]"
-                                            placeholder="Pourquoi ?"
+                                            placeholder="Commentaire"
                                             {{ $question->is_required ? 'required' : '' }}>{{ old('reponse.' . $question->id) }}</textarea>
                                     </div>
                                 @elseif($question->type_reponse === 'rating_1_5')
@@ -330,14 +330,14 @@
                                             class="form-control"
                                             rows="4"
                                             name="justification_non[{{ $question->id }}]"
-                                            placeholder="Pouvez-vous justifier votre réponse ?">{{ old('justification_non.' . $question->id) }}</textarea>
+                                            placeholder="Commentaire">{{ old('justification_non.' . $question->id) }}</textarea>
                                     </div>
                                 @elseif($question->type_reponse === 'long_text')
                                     <textarea
                                         class="form-control"
                                         rows="4"
                                         name="reponse[{{ $question->id }}]"
-                                        placeholder="Votre reponse"
+                                        placeholder="Commentaire"
                                         {{ $question->is_required ? 'required' : '' }}>{{ old('reponse.' . $question->id) }}</textarea>
                                 @elseif($question->type_reponse === 'int')
                                     <input
