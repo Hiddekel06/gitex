@@ -1,7 +1,9 @@
 
 <header style="position: relative; background: transparent; border-bottom: none; padding: 0.75rem 0; transition: all 0.3s ease; z-index: 10;">
     <div class="d-flex align-items-center gap-3 header-logo-responsive">
-        <img src="/images/logoGov.png" alt="Logo" class="logo-gov" />
+        <a href="{{ url('/feedback/identification') }}">
+            <img src="/images/logoGov.png" alt="Logo" class="logo-gov" />
+        </a>
     </div>
     <div class="header-neon-bar"></div>
 </header>

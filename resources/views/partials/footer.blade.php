@@ -6,7 +6,7 @@
     </div>
     <div class="container">
         <p style="margin: 0; font-size: 0.8rem; letter-spacing: 0.3px; color: #8f9e8b; transition: color 0.2s ease;">
-            &copy; {{ date('Y') }} MFPTRSP/DSI – Gov'Athon Gitex
+            &copy; {{ date('Y') }} MFPTRSP/DSI – Gov'Athon
         </p>
     </div>
 </footer>
