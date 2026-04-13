@@ -132,7 +132,7 @@
                 <span>GITEX 2026</span>
             </div>
 
-            <h2 class="title mb-3">Merci pour votre énergie, vos idées et ces beaux moments partagés.</h2>
+            <h2 class="title mb-3">Merci pour vos idées et ces beaux moments partagés.</h2>
 
             <p class="subtitle mb-4">
                 Vos réponses ont bien été enregistrées. Ce retour d'expérience nous aide à mieux préparer la suite,
@@ -144,7 +144,7 @@
             </div> -->
 
             <div class="signature">
-                Merci pour votre confiance. Vous pouvez maintenant fermer cette page.
+            
             </div>
         </div>
     </div>

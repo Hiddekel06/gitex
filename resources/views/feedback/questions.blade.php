@@ -198,6 +198,9 @@
 
                     <div class="d-grid gap-3">
                         @foreach($sectionQuestions as $question)
+                            @php
+                                $normalizedQuestionText = (string) \Illuminate\Support\Str::of($question->intitule)->ascii()->lower();
+                            @endphp
                             <div class="question-card" data-question-text="{{ $question->intitule }}">
                                 <div class="question-label">
                                     {{ $globalIndex }}. {{ $question->intitule }}
@@ -206,7 +209,7 @@
                                     @endif
                                 </div>
 
-                                @if(str_contains(strtolower($question->intitule), 'cette experience va-t-elle contribuer') && str_contains(strtolower($question->intitule), 'si oui, comment'))
+                                @if(str_contains($normalizedQuestionText, 'cette experience va-t-elle contribuer') && str_contains($normalizedQuestionText, 'si oui, comment'))
                                     <label class="radio-inline">
                                         <input
                                             type="radio"
@@ -248,7 +251,7 @@
                                             name="justification_non[{{ $question->id }}]"
                                             placeholder="Commentaire">{{ old('justification_non.' . $question->id) }}</textarea>
                                     </div>
-                                @elseif(str_contains(strtolower($question->intitule), 'recommanderiez-vous ce type d') && str_contains(strtolower($question->intitule), 'pourquoi'))
+                                @elseif(str_contains($normalizedQuestionText, 'recommanderiez-vous ce type d') && str_contains($normalizedQuestionText, 'pourquoi'))
                                     <label class="radio-inline">
                                         <input
                                             type="radio"
@@ -364,7 +367,7 @@
                 </div>
             @endforeach
 
-            <button type="submit" class="btn btn-success w-100 mt-4">Envoyer mes reponses</button>
+            <button type="submit" class="btn btn-success w-100 mt-4">Envoyer mes réponses</button>
         </form>
 
        
